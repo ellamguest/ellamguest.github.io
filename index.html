@@ -1,7 +1,208 @@
+
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <title>stole this html</title>
+    <meta charset='utf-8' />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="black-square.png"/>
+    <link rel="shortcut icon" type="image/png" href="http://ellamguest.github.io/black-square.png"/>
+    <style>
+
+     body{
+     	background: #B7B8B6;
+     }
+
+     .header{
+     	color: #FF420E;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 48px;
+        width: 1248px;
+        margin: 40px auto 40px auto;
+     }
+
+      .head {
+      	font-weight: 700;
+      	padding-left: 10px;
+
+      }
+      .subhead{
+      	font-size: 36px;
+      	padding-left: 10px;
+      }
+
+      a.top{
+      	text-decoration: none;
+      	cursor: pointer;
+      	color: #80BD9E;
+      }
+      a.top:hover{
+      	color: #F98866;
+      }
+
+      a.box{
+        text-decoration: none;
+        cursor: pointer;
+        border: #2b24ec 1px solid;
+        position: relative;
+        overflow: hidden;
+        margin: 0px 10px 20px 10px;
+      }
+      a.box:hover{
+        box-shadow: 2px 2px 7px #130f7a;
+        background: rgba(43,36,236, 0.1);
+      }
+
+      .grid{
+        display: flex;
+        width: 1248px;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        justify-content: flex-start;
+      }
+
+      .project{
+      	color: #2b24ec;
+      	font-family: Montserrat, sans-serif;
+        width: 250px;
+        margin: 10px 20px 20px 20px;
+        height: 150px;
+      }
+
+      .project-overlay{
+      	display: block;
+      	width: 250px;
+      	position: absolute;
+      	z-index: -1;
+      	top: 0;
+      	left: 0;
+      }
+      .text-box{
+      	background: #ffffff;
+      	display: inline-block;
+      	margin-bottom: 10px;
+      }
+
+      .title{
+      	line-height: 1.2;
+      	margin: 0;
+      	font-size: 18px;
+      	font-weight: 700;
+      }
+
+      img{
+      	width: 300px;
+      }
+
+      @media only screen and (min-width: 768px) and (max-width: 1248px) {
+      		.header, .grid{
+      			width: 768px;
+      		}
+      		.project{
+      			width: 300px;
+      		}
+      		img{
+      			width: 150%;
+      		}
+      }
+
+      @media only screen and (max-width: 767px) {
+      		.header, .grid{
+      			width: 479px;
+      		}
+      		.project{
+      			width: 300px;
+      		}
+      		img{
+      			width: 150%;
+      		}
+      }
+
+    </style>
+  </head>
+  <body>
+  	<div class='header'>
+  		<div class='head'>Ella Guest </div>
+  		<div class='subhead'>phd researcher at <a class='top' href="https://www.socialsciences.manchester.ac.uk/social-statistics/research/postgraduate-research/current-phd-students/ella-guest/">University of Manchester</a></div>
+  		<div class='subhead'><a class='top' href="https://twitter.com/ellamguest">@ellamguest</a> | ellamguest@gmail.com</div>
+  	</div>
+
+    	<div class='grid'></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript">
+      // Google sheets parameters
+      var CLIENT_ID = '282789162693-d1qbkuo6uig9vrrocbn19beqe65fk9ep.apps.googleusercontent.com';
+      var API_KEY = 'AIzaSyDvFa-dDExpUuP7Q_YPqP4yfsOiiau0nwU';
+      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+
+
+      var data;
+
+
+      // Function to get data from spreadsheet
+      function getData() {
+        gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1by8a00uGvIOCmR4mFGGImdecHFagL06DMsnlaFZIGe0',
+          range: 'projects!A2:Z',
+        }).then(function(response) {
+          makeGrid(response.result.values);
+        });
+      }
+
+
+      // On load, called to load the auth2 library and API client library.
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+
+
+      // Initializes the API client library and calls the data request
+      function initClient() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES
+        }).then(function () {
+          getData();
+        });
+      }
+
+
+      function makeGrid(data){
+        data.forEach(function(row) {
+          var link = d3.select('.grid').append('a').attr('class','box').attr('href',row[5])
+          var project = link.append('div').attr('class','project');
+          // var top = project.append('div').attr('class','top');
+          project.append('div').attr('class','title').append('div').attr('class','text-box').text(row[0]);
+          project.append('div').attr('class','date').append('div').attr('class','text-box').text(row[1]);
+          project.append('div').attr('class','slug').append('div').attr('class','text-box').text(row[3]);
+          // project.append('p').attr('class','org').text('for '+row[2]);
+
+          var overlay = link.append('div').attr('class','project-overlay');
+          var image = overlay.append('div').attr('class', 'image');
+
+
+          if(row[6]){
+            image.append('img').attr('src','images/'+row[6]+'.png');
+          }
+          else{
+          	image.append('img').attr('src','images/white-square.png');
+          }
+        });
+
+      }
+
+
+
+
+
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
 </html>

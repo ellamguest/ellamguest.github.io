@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>hello</title>
+<link rel="icon" href="favicon.ico">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+  body {
+    background: #16151c;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, "Times New Roman", serif;
+    cursor: pointer;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+  }
+  .blob:nth-child(1) {
+    width: 34vmin; height: 34vmin;
+    background: #534ab7;
+    top: 12%; left: 14%;
+    animation: bob1 10s ease-in-out infinite;
+  }
+  .blob:nth-child(2) {
+    width: 42vmin; height: 42vmin;
+    background: #993c1d;
+    bottom: 8%; right: 12%;
+    animation: bob2 12s ease-in-out infinite;
+  }
+  .blob:nth-child(3) {
+    width: 28vmin; height: 28vmin;
+    background: #0f6e56;
+    bottom: 18%; left: 36%;
+    animation: bob3 14s ease-in-out infinite;
+  }
+  #phrase {
+    position: relative;
+    margin: 0;
+    padding: 0 1rem;
+    font-size: clamp(1.8rem, 6vw, 3.4rem);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: #eeedfe;
+    text-align: center;
+    animation: breathe 6s ease-in-out infinite;
+    user-select: none;
+  }
+  @keyframes bob1 { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(6vmin, -5vmin) } }
+  @keyframes bob2 { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(-5vmin, 4vmin) } }
+  @keyframes bob3 { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(4vmin, 5vmin) } }
+  @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.7 } 50% { transform: scale(1.05); opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) {
+    .blob, #phrase { animation: none; }
+    #phrase { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <h1 id="phrase"></h1>
+<script>
+  const phrases = [
+    "hello, wanderer",
+    "you found me",
+    "nothing to see here",
+    "breathe",
+    "gone fishing",
+    "somewhere else right now",
+    "shh",
+    "this page intentionally left calm"
+  ];
+  let i = Math.floor(Math.random() * phrases.length);
+  const el = document.getElementById("phrase");
+  el.textContent = phrases[i];
+  document.body.addEventListener("click", () => {
+    i = (i + 1) % phrases.length;
+    el.textContent = phrases[i];
+  });
+</script>
+</body>
+</html>
